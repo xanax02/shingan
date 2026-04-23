@@ -5,8 +5,11 @@ import type { GameMode } from "../types/game.js";
  * Import from here rather than using raw strings anywhere.
  */
 export const SCENE_KEYS = {
-  BOOT: "BootScene",
-  MAIN: "MainScene",
+  BOOT:     "BootScene",
+  MAIN:     "MainScene",
+  REACTION: "ReactionScene",
+  GRIDSHOT: "GridshotScene",
+  TRACKING: "TrackingScene",
 } as const;
 
 export type SceneKey = (typeof SCENE_KEYS)[keyof typeof SCENE_KEYS];
@@ -20,7 +23,7 @@ export type SceneKey = (typeof SCENE_KEYS)[keyof typeof SCENE_KEYS];
  * here so loadMode("gridshot") → starts the right scene automatically.
  */
 export const MODE_SCENE_MAP: Record<GameMode, string> = {
-  gridshot: "GridShotScene",
+  gridshot: "GridshotScene",
   tracking: "TrackingScene",
   reaction: "ReactionScene",
 };

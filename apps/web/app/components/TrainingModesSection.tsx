@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 const MODES = [
   {
     id: "flick",
+    href: "/train/gridshot",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
         <path d="M6 26L26 6M26 6H18M26 6V14" stroke="#00C8FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -21,6 +22,7 @@ const MODES = [
   },
   {
     id: "tracking",
+    href: "/train/tracking",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="16" r="10" stroke="#7C3AED" strokeWidth="2" fill="none" />
@@ -38,6 +40,7 @@ const MODES = [
   },
   {
     id: "reaction",
+    href: "/train/reaction",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
         <path d="M16 4L16 12M16 20L16 28M4 16L12 16M20 16L28 16" stroke="#FF3CAC" strokeWidth="2.5" strokeLinecap="round" />
@@ -124,14 +127,9 @@ export function TrainingModesSection() {
                 position: "relative",
                 overflow: "hidden",
               }}
-              onHoverStart={(e) => {
-                const el = e.target as HTMLElement;
-                el.closest("[data-mode]")?.setAttribute("style", `box-shadow: 0 0 60px ${mode.color}20; border-color: ${mode.color}30`);
-              }}
             >
               {/* Top glow line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${mode.color}, transparent)`, opacity: 0.6 }} />
-
               {/* Background glow */}
               <div style={{ position: "absolute", top: 0, right: 0, width: 200, height: 200, borderRadius: "50%", background: `radial-gradient(circle, ${mode.color}08, transparent 70%)`, pointerEvents: "none" }} />
 
@@ -140,7 +138,7 @@ export function TrainingModesSection() {
                 {mode.icon}
               </div>
 
-              {/* Title */}
+              {/* Tagline + title */}
               <div style={{ marginBottom: 4 }}>
                 <span style={{ fontSize: 11, fontWeight: 600, color: mode.color, letterSpacing: "0.08em", textTransform: "uppercase" }}>{mode.tagline}</span>
               </div>
@@ -167,9 +165,11 @@ export function TrainingModesSection() {
                 </div>
               </div>
 
-              {/* CTA */}
-              <button
+              {/* CTA — navigates to game route */}
+              <a
+                href={mode.href}
                 style={{
+                  display: "block",
                   marginTop: 22,
                   width: "100%",
                   padding: "12px",
@@ -181,20 +181,22 @@ export function TrainingModesSection() {
                   fontWeight: 700,
                   cursor: "pointer",
                   letterSpacing: "0.04em",
-                  transition: "background 0.2s, box-shadow 0.2s",
+                  textAlign: "center",
+                  textDecoration: "none",
                   fontFamily: "inherit",
+                  transition: "background 0.2s, box-shadow 0.2s",
                 }}
                 onMouseEnter={(e) => {
-                  (e.target as HTMLElement).style.background = `${mode.color}22`;
-                  (e.target as HTMLElement).style.boxShadow = `0 0 20px ${mode.color}30`;
+                  (e.currentTarget as HTMLAnchorElement).style.background = `${mode.color}22`;
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 20px ${mode.color}30`;
                 }}
                 onMouseLeave={(e) => {
-                  (e.target as HTMLElement).style.background = `${mode.color}12`;
-                  (e.target as HTMLElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLAnchorElement).style.background = `${mode.color}12`;
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
                 }}
               >
                 Start {mode.title} →
-              </button>
+              </a>
             </motion.div>
           ))}
         </div>

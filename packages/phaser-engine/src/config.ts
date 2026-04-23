@@ -1,6 +1,9 @@
 import Phaser from "phaser";
 import { BootScene } from "./scenes/BootScene";
 import { MainScene } from "./scenes/MainScene";
+import { ReactionScene } from "./modes/ReactionScene";
+import { GridshotScene } from "./modes/GridshotScene";
+import { TrackingScene } from "./modes/TrackingScene";
 import { CANVAS_BG_COLOR, TARGET_FPS } from "./utils/constants";
 import type { AimTrainerOptions } from "./types/game";
 
@@ -90,3 +93,165 @@ export function buildPhaserConfig(
     scene: [BootScene, MainScene],
   };
 }
+
+/**
+ * buildReactionConfig — Phaser config for the Reaction Time Trainer.
+ *
+ * Differences from the main aim-trainer config:
+ *   • No BootScene — ReactionScene is the only scene and boots directly.
+ *   • overlayContainer is stored in game.registry via callbacks.preBoot so
+ *     ReactionScene can read it in create() without depending on scene.start data.
+ *   • Cursor remains visible (no cursor: none) for click accuracy.
+ */
+export function buildReactionConfig(
+  container: HTMLElement,
+  overlayContainer: HTMLElement,
+  options: AimTrainerOptions = {}
+): Phaser.Types.Core.GameConfig {
+  return {
+    type: Phaser.AUTO,
+    parent: container,
+
+    backgroundColor: CANVAS_BG_COLOR,
+
+    scale: {
+      mode: Phaser.Scale.RESIZE,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      width: container.clientWidth || window.innerWidth,
+      height: container.clientHeight || window.innerHeight,
+    },
+
+    render: {
+      antialias: true,
+      antialiasGL: true,
+      roundPixels: false,
+      transparent: false,
+      powerPreference: "high-performance",
+    },
+
+    fps: {
+      target: options.targetFps ?? TARGET_FPS,
+      smoothStep: true,
+    },
+
+    input: {
+      mouse: {
+        preventDefaultDown: true,
+        preventDefaultUp: true,
+        preventDefaultMove: true,
+        preventDefaultWheel: false,
+      },
+    },
+
+    disableContextMenu: true,
+
+    // ReactionScene is the sole scene — no BootScene needed
+    scene: [new ReactionScene()],
+
+    callbacks: {
+      /**
+       * preBoot fires during new Phaser.Game() before any scene lifecycle.
+       * Stash the overlayContainer in the registry so ReactionScene.create()
+       * can read it safely regardless of how Phaser schedules scene start.
+       */
+      preBoot: (game: Phaser.Game) => {
+        game.registry.set("overlayContainer", overlayContainer);
+      },
+    },
+  };
+}
+
+/**
+ * buildGridshotConfig — Phaser config for the Gridshot 3-Ball Trainer.
+ */
+export function buildGridshotConfig(
+  container: HTMLElement,
+  overlayContainer: HTMLElement,
+  options: AimTrainerOptions = {}
+): Phaser.Types.Core.GameConfig {
+  return {
+    type: Phaser.AUTO,
+    parent: container,
+    backgroundColor: CANVAS_BG_COLOR,
+    scale: {
+      mode: Phaser.Scale.RESIZE,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      width: container.clientWidth || window.innerWidth,
+      height: container.clientHeight || window.innerHeight,
+    },
+    render: {
+      antialias: true,
+      antialiasGL: true,
+      roundPixels: false,
+      transparent: false,
+      powerPreference: "high-performance",
+    },
+    fps: {
+      target: options.targetFps ?? TARGET_FPS,
+      smoothStep: true,
+    },
+    input: {
+      mouse: {
+        preventDefaultDown: true,
+        preventDefaultUp: true,
+        preventDefaultMove: true,
+        preventDefaultWheel: false,
+      },
+    },
+    disableContextMenu: true,
+    scene: [new GridshotScene()],
+    callbacks: {
+      preBoot: (game: Phaser.Game) => {
+        game.registry.set("overlayContainer", overlayContainer);
+      },
+    },
+  };
+}
+
+/**
+ * buildTrackingConfig — Phaser config for the Tracking Trainer.
+ */
+export function buildTrackingConfig(
+  container: HTMLElement,
+  overlayContainer: HTMLElement,
+  options: AimTrainerOptions = {}
+): Phaser.Types.Core.GameConfig {
+  return {
+    type: Phaser.AUTO,
+    parent: container,
+    backgroundColor: CANVAS_BG_COLOR,
+    scale: {
+      mode: Phaser.Scale.RESIZE,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      width: container.clientWidth || window.innerWidth,
+      height: container.clientHeight || window.innerHeight,
+    },
+    render: {
+      antialias: true,
+      antialiasGL: true,
+      roundPixels: false,
+      transparent: false,
+      powerPreference: "high-performance",
+    },
+    fps: {
+      target: options.targetFps ?? TARGET_FPS,
+      smoothStep: true,
+    },
+    input: {
+      mouse: {
+        preventDefaultDown: false,   // pointer needs to move freely
+        preventDefaultUp: false,
+        preventDefaultMove: false,
+        preventDefaultWheel: false,
+      },
+    },
+    disableContextMenu: true,
+    scene: [new TrackingScene()],
+    callbacks: {
+      preBoot: (game: Phaser.Game) => {
+        game.registry.set("overlayContainer", overlayContainer);
+      },
+    },
+  };
+}
+

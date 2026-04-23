@@ -64,3 +64,70 @@ export const DEBUG_DEPTH = 1000;
 // ─── Crosshair Depth ───────────────────────────────────────────────────────
 /** Crosshair depth — above game objects, below debug. */
 export const CROSSHAIR_DEPTH = 500;
+
+// ─── Reaction Trainer ────────────────────────────────────────────────────────
+
+/** Minimum random delay before target spawns (ms). */
+export const REACTION_MIN_DELAY_MS = 500;
+
+/** Maximum random delay before target spawns (ms). */
+export const REACTION_MAX_DELAY_MS = 2500;
+
+/** Total rounds per session. */
+export const REACTION_TOTAL_ROUNDS = 10;
+
+/** Target circle radius in pixels. */
+export const TARGET_RADIUS = 38;
+
+/** Primary target fill color — electric cyan. */
+export const TARGET_COLOR = 0x00c8ff;
+
+/** Target inner highlight color (slightly lighter). */
+export const TARGET_HIGHLIGHT_COLOR = 0x80e8ff;
+
+/** Target outer glow ring color. */
+export const TARGET_GLOW_COLOR = 0x00c8ff;
+
+/** Phaser depth for the target (above background, below HUD). */
+export const TARGET_DEPTH = 200;
+
+/** Particle depth — above target. */
+export const TARGET_PARTICLE_DEPTH = 210;
+
+/** Duration (ms) of the scale-in spawn animation. */
+export const TARGET_SPAWN_DURATION = 160;
+
+/** Minimum pixel margin from any canvas edge for target placement. */
+export const TARGET_SAFE_MARGIN = 80;
+
+/** Grade thresholds (average reaction ms). */
+export const GRADE_S_MAX = 180;
+export const GRADE_A_MAX = 210;
+export const GRADE_B_MAX = 240;
+export const GRADE_C_MAX = 280;
+
+/** Z-index for HTML overlay sitting above the Phaser canvas. */
+export const OVERLAY_Z_INDEX = 100;
+
+/** Z-index for the end-session modal (above overlay). */
+export const MODAL_Z_INDEX = 200;
+
+/** Reaction scene key constant (mirrors SceneRegistry). */
+export const REACTION_SCENE_KEY = 'ReactionScene';
+
+// ─── Gridshot Trainer ──────────────────────────────────────────────────────
+
+/** Session duration in milliseconds. */
+export const GRIDSHOT_DURATION_MS = 60_000;
+
+/** Number of targets always alive on screen. */
+export const GRIDSHOT_TARGET_COUNT = 3;
+
+// ─── Tracking Trainer ──────────────────────────────────────────────────────
+
+/** Session duration in milliseconds. */
+export const TRACKING_DURATION_MS = 30_000;
+
+/** Tracking target radius — slightly larger so tracking is skill-tested, not hunting. */
+export const TRACKING_TARGET_RADIUS = 48;
+

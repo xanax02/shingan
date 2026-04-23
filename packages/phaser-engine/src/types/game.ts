@@ -61,3 +61,31 @@ export interface AimTrainerHandle {
    */
   loadMode(mode: GameMode): void;
 }
+
+/**
+ * Handle returned by createReactionTrainer().
+ * Mirrors AimTrainerHandle but without loadMode.
+ */
+export interface ReactionTrainerHandle {
+  destroy(): void;
+  pause(): void;
+  resume(): void;
+}
+
+/**
+ * Handle returned by createGridshotTrainer().
+ */
+export interface GridshotTrainerHandle {
+  destroy(): void;
+  pause(): void;
+  resume(): void;
+}
+
+/**
+ * Handle returned by createTrackingTrainer().
+ */
+export interface TrackingTrainerHandle {
+  destroy(): void;
+  pause(): void;
+  resume(): void;
+}

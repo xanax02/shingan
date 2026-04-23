@@ -1,4 +1,4 @@
-import type Phaser from "phaser";
+import Phaser from "phaser";
 import type { InputSnapshot } from "../types/game";
 
 /**
