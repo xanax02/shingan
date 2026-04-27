@@ -13,10 +13,10 @@ import type { GridshotTrainerHandle } from "@repo/game-engine";
  *     <nav>                ← back link, always on top
  *   </wrapper>
  */
-export function GridshotClient() {
-  const canvasRef  = useRef<HTMLDivElement>(null);
+export default function GridshotClient() {
+  const canvasRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const handleRef  = useRef<GridshotTrainerHandle | null>(null);
+  const handleRef = useRef<GridshotTrainerHandle | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -49,14 +49,13 @@ export function GridshotClient() {
           margin: 0;
           padding: 0;
           background: #070710;
-          cursor: none;
         }
         #gs-canvas canvas {
           display: block;
           width: 100% !important;
           height: 100% !important;
         }
-        #gs-canvas { cursor: none; }
+        #gs-canvas { cursor: crosshair; }
       `}</style>
 
       <div style={{ position: "fixed", inset: 0, overflow: "hidden", background: "#070710" }}>

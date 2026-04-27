@@ -17,9 +17,9 @@ import type { TrackingTrainerHandle } from "@repo/game-engine";
  * precise pointer awareness.
  */
 export function TrackingClient() {
-  const canvasRef  = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const handleRef  = useRef<TrackingTrainerHandle | null>(null);
+  const handleRef = useRef<TrackingTrainerHandle | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

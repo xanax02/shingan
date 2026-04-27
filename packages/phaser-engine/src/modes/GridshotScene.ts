@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { BaseScene } from "../core/BaseScene";
 import { SCENE_KEYS } from "../core/SceneRegistry";
+import { Crosshair } from "../entities/Crosshair";
 import { Target } from "../entities/Target";
 import { GridshotOverlay, type GridshotSessionStats } from "../ui/GridshotOverlay";
 import {
@@ -56,6 +57,7 @@ export class GridshotScene extends BaseScene {
   static readonly KEY = SCENE_KEYS.GRIDSHOT;
 
   private targets: Target[] = [];
+  private crosshair!: Crosshair;
   private overlay!: GridshotOverlay;
   private overlayContainer!: HTMLElement;
   private session!: SessionData;
@@ -77,8 +79,8 @@ export class GridshotScene extends BaseScene {
       (this.game.registry.get("overlayContainer") as HTMLElement | undefined) ??
       document.body;
 
-    // Hide OS cursor — custom crosshair in Phaser
-    this.input.setDefaultCursor("none");
+    // Use OS crosshair cursor — reliable across all browsers without a Phaser entity
+    this.input.setDefaultCursor("crosshair");
 
     // Background
     this.bgGfx = this.add.graphics();
@@ -87,6 +89,9 @@ export class GridshotScene extends BaseScene {
       this.bgGfx.clear();
       this.drawGridOnto(this.bgGfx, w, h);
     });
+
+    // Custom Phaser crosshair (replaces hidden OS cursor)
+    this.crosshair = new Crosshair(this);
 
     // HTML overlay
     this.overlay = new GridshotOverlay(this.overlayContainer);
@@ -107,8 +112,16 @@ export class GridshotScene extends BaseScene {
     this.input.off(Phaser.Input.Events.POINTER_DOWN, this.handleClick, this);
     this.countdownTimer?.remove();
     this.destroyAllTargets();
+    this.crosshair?.destroy();
     this.overlay?.destroy();
     super.shutdown();
+  }
+
+  // ─── Game loop ─────────────────────────────────────────────────────────────
+
+  update(): void {
+    const ptr = this.input.activePointer;
+    this.crosshair.setPosition(ptr.x, ptr.y);
   }
 
   // ─── Session ───────────────────────────────────────────────────────────────
@@ -190,6 +203,9 @@ export class GridshotScene extends BaseScene {
 
   private handleClick = (pointer: Phaser.Input.Pointer): void => {
     if (!this.running) return;
+
+    // Visual feedback on every click
+    this.crosshair.triggerClickBurst();
 
     let hit = false;
     for (let i = 0; i < this.targets.length; i++) {

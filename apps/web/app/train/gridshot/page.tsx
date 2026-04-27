@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GridshotClient } from "./GridshotClient";
+import GridshotClient from "./GridshotClient";
 
 export const metadata: Metadata = {
   title: "Gridshot — AimOS",
