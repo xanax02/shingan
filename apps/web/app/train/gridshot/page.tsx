@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import GridshotClient from "./GridshotClient";
+import GridshotClientR3F from "./GridshotClientR3F";
 
 export const metadata: Metadata = {
   title: "Gridshot — AimOS",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function GridshotPage() {
-  return <GridshotClient />;
+  return <GridshotClientR3F />;
 }

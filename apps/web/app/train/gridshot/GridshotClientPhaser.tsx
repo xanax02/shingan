@@ -13,7 +13,7 @@ import type { GridshotTrainerHandle } from "@repo/game-engine";
  *     <nav>                ← back link, always on top
  *   </wrapper>
  */
-export default function GridshotClient() {
+export default function GridshotClientPhaser() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<GridshotTrainerHandle | null>(null);
