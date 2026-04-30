@@ -5,6 +5,8 @@ import { PerspectiveCamera } from '@react-three/drei';
 import Room from './Room';
 import FPSCamera from '../../components/FPSCamera';
 import { useRef } from 'react';
+import InitGame from '../../game-engine/InitGame';
+import Targets from '../../game-engine/Targets';
 
 export default function GridshotClientR3F() {
 
@@ -32,6 +34,8 @@ export default function GridshotClientR3F() {
                 <directionalLight position={[0, 8, 0]} intensity={1.5} />
                 <Room />
                 <FPSCamera lockTarget={pointerLockRef} />
+                <InitGame />
+                <Targets />
             </Canvas>
         </div>
     );
