@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { DoubleSide } from "three";
 
+// TODO: Refactore this code
+// TODO: make changes to room dimension (close to gridshot scene size)
+
 // ─── Room dimensions ──────────────────────────────────────────────────────────
 const ROOM_W = 40;   // total width  (left ↔ right)
 const ROOM_H = 16;   // total height (floor ↔ ceiling)
