@@ -20,12 +20,12 @@ const GRID_W = 40;
 const GRID_H = 16;
 const GRID_D = 60;
 
-
+//TODO: place target in front of camera
 function generateTargetPosition(): THREE.Vector3 {
     return new THREE.Vector3(
         (Math.random() - 0.5) * GRID_W,
         (Math.random() - 0.5) * GRID_H,
-        (Math.random() - 0.5) * GRID_D
+        -8
     )
 }
 

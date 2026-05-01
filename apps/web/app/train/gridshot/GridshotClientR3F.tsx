@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera } from '@react-three/drei';
+import { Environment, PerspectiveCamera } from '@react-three/drei';
 import Room from './Room';
 import FPSCamera from '../../components/FPSCamera';
 import { useRef } from 'react';
@@ -28,10 +28,11 @@ export default function GridshotClientR3F() {
         <div className='h-[100vh] w-[100vw]'>
             <Crosshair />
             <Canvas onClick={handleClick}>
+
                 <PerspectiveCamera
                     makeDefault
-                    fov={90}
-                    position={[0, 0, 20]}
+                    fov={75}
+                    position={[0, -3, 15]}
                 />
                 <ambientLight intensity={1} />
                 <directionalLight position={[0, 8, 0]} intensity={1.5} />
