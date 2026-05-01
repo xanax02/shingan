@@ -10,6 +10,7 @@ export default function Targets() {
                 <mesh
                     key={target.id}
                     position={target.position}
+                    userData={{ type: 'target', id: target.id }}
                 >
                     <sphereGeometry args={[1, 16, 16]} />
                     <meshBasicMaterial color="hotpink" />

@@ -7,6 +7,8 @@ import FPSCamera from '../../components/FPSCamera';
 import { useRef } from 'react';
 import InitGame from '../../game-engine/InitGame';
 import Targets from '../../game-engine/Targets';
+import RayCaster from '../../game-engine/RayCaster';
+import { Crosshair } from '../../game-engine/Crosshair';
 
 export default function GridshotClientR3F() {
 
@@ -24,6 +26,7 @@ export default function GridshotClientR3F() {
 
     return (
         <div className='h-[100vh] w-[100vw]'>
+            <Crosshair />
             <Canvas onClick={handleClick}>
                 <PerspectiveCamera
                     makeDefault
@@ -36,6 +39,7 @@ export default function GridshotClientR3F() {
                 <FPSCamera lockTarget={pointerLockRef} />
                 <InitGame />
                 <Targets />
+                <RayCaster />
             </Canvas>
         </div>
     );
