@@ -41,7 +41,11 @@ export const useFPSControls = (lockTarget: React.RefObject<Element | null>) => {
 
     }, [gl.domElement])
 
+
+    const _euler = new THREE.Euler(0, 0, 0, "YXZ");
+
     useFrame(() => {
-        camera.quaternion.setFromEuler(new THREE.Euler(pitch.current, yaw.current, 0, "YXZ"));
+        _euler.set(pitch.current, yaw.current, 0);
+        camera.quaternion.setFromEuler(_euler);
     })
 }
