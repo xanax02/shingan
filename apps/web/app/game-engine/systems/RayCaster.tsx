@@ -46,6 +46,7 @@ import { useThree } from "@react-three/fiber";
 import { Raycaster, Vector2 } from "three";
 import { useEffect } from "react";
 import { TargetManager } from "./TargetManager";
+import { useGameStore } from "../../store/gameStore";
 
 const raycaster = new Raycaster();
 const pointer = new Vector2(0, 0); // center
@@ -57,6 +58,10 @@ export function useShooting(targetManager: TargetManager | null) {
         if (!targetManager) return;
 
         function handleClick() {
+            // Only process shots during the playing phase
+            const { phase, registerHit, registerMiss } = useGameStore.getState();
+            if (phase !== "playing") return;
+
             raycaster.setFromCamera(pointer, camera);
 
             const intersects = raycaster.intersectObjects(
@@ -66,6 +71,9 @@ export function useShooting(targetManager: TargetManager | null) {
             if (intersects.length > 0) {
                 const hit = intersects[0]?.object;
                 targetManager!.destroy(hit as THREE.Mesh);
+                registerHit();
+            } else {
+                registerMiss();
             }
         }
 

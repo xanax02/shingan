@@ -1,19 +1,29 @@
 "use client";
 
 import { Canvas } from '@react-three/fiber'
-import { Environment, PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera } from '@react-three/drei';
 import Room from './Room';
 import FPSCamera from '../../components/FPSCamera';
-import { useRef } from 'react';
-import InitGame from '../../game-engine/InitGame';
-import Targets from '../../game-engine/Targets';
+import { useEffect, useRef } from 'react';
 import { Crosshair } from '../../game-engine/Crosshair';
 import GameScene from '../../game-engine/components/GameScene';
+import CountdownOverlay from '../../game-engine/components/CountdownOverlay';
+import GridshotHUD from '../../game-engine/components/GridshotHUD';
+import ResultsOverlay from '../../game-engine/components/ResultsOverlay';
+import { useGameStore } from '../../store/gameStore';
 
 export default function GridshotClientR3F() {
 
     const pointerLockRef = useRef<Element | null>(null);
+    const phase = useGameStore((s) => s.phase);
+    const startCountdown = useGameStore((s) => s.startCountdown);
+    const reset = useGameStore((s) => s.reset);
 
+    // Start the countdown on mount, cleanup on unmount
+    useEffect(() => {
+        startCountdown();
+        return () => reset();
+    }, []);
 
     const handleClick = (e: React.MouseEvent) => {
         pointerLockRef.current = e.currentTarget;
@@ -23,12 +33,16 @@ export default function GridshotClientR3F() {
         e.currentTarget.requestPointerLock();
     }
 
+    // Only show crosshair during gameplay
+    const showCrosshair = phase === 'playing';
 
     return (
-        <div className='h-[100vh] w-[100vw]'>
-            <Crosshair />
+        <div className='h-[100vh] w-[100vw]' style={{ position: 'relative' }}>
+            {showCrosshair && <Crosshair />}
+            <GridshotHUD />
+            <CountdownOverlay />
+            <ResultsOverlay />
             <Canvas onClick={handleClick}>
-
                 <PerspectiveCamera
                     makeDefault
                     fov={75}
