@@ -2,7 +2,7 @@ import { Scene, Vector3, Camera } from "three";
 import { createTarget } from "../entities/Targets";
 import * as THREE from "three";
 
-//TODO: separate target from each other(sometime target forms one above another)
+// Target overlap is prevented via findValidPosition — retries up to MAX_PLACEMENT_ATTEMPTS.
 export class TargetManager {
   private scene: Scene;
   private camera: Camera;
@@ -12,6 +12,11 @@ export class TargetManager {
 
   private MIN_R = 4;
   private MAX_R = 12;
+
+  /** Minimum centre-to-centre distance between any two targets (units). */
+  private MIN_SEPARATION = 2.5; // targets have radius 1, so 0.5 gap between surfaces
+  /** How many random candidates to try before giving up and using a fallback. */
+  private MAX_PLACEMENT_ATTEMPTS = 30;
 
   constructor(scene: Scene, camera: Camera) {
     this.scene = scene;
@@ -25,7 +30,7 @@ export class TargetManager {
   }
 
   spawnNext() {
-    const pos = this.getNextPosition();
+    const pos = this.findValidPosition();
 
     const target = createTarget();
     target.position.copy(pos);
@@ -48,6 +53,7 @@ export class TargetManager {
     this.targets.clear();
   }
 
+  /** Build one flick-style candidate position relative to lastPosition. */
   private getNextPosition(): Vector3 {
     const dir = this.randomDirection();
 
@@ -61,8 +67,57 @@ export class TargetManager {
     candidate = this.applyCenterBias(candidate);
     candidate = this.clamp(candidate);
 
-    this.lastPosition.copy(candidate);
     return candidate;
+  }
+
+  /** Generate a random position anywhere inside the clamped play area. */
+  private getRandomPosition(): Vector3 {
+    return new Vector3(
+      (Math.random() * 2 - 1) * 20,
+      (Math.random() * 2 - 1) * 5,
+      -5
+    );
+  }
+
+  /** Returns true when `candidate` is far enough from every live target. */
+  private isClearOfTargets(candidate: Vector3): boolean {
+    for (const t of this.targets) {
+      if (t.position.distanceTo(candidate) < this.MIN_SEPARATION) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Tries up to MAX_PLACEMENT_ATTEMPTS flick-style positions.
+   * Falls back to random positions if none of them satisfy the separation
+   * constraint, so spawning never deadlocks even when the arena is crowded.
+   */
+  private findValidPosition(): Vector3 {
+    // --- Phase 1: flick-style candidates ---
+    for (let i = 0; i < this.MAX_PLACEMENT_ATTEMPTS; i++) {
+      const candidate = this.getNextPosition();
+      if (this.isClearOfTargets(candidate)) {
+        this.lastPosition.copy(candidate);
+        return candidate;
+      }
+    }
+
+    // --- Phase 2: fully random fallback ---
+    for (let i = 0; i < this.MAX_PLACEMENT_ATTEMPTS; i++) {
+      const candidate = this.getRandomPosition();
+      if (this.isClearOfTargets(candidate)) {
+        this.lastPosition.copy(candidate);
+        return candidate;
+      }
+    }
+
+    // Last resort: return a random position even if it overlaps
+    // (only happens when MIN_SEPARATION is too large for the arena size).
+    const fallback = this.getRandomPosition();
+    this.lastPosition.copy(fallback);
+    return fallback;
   }
 
   private randomDirection(): Vector3 {
