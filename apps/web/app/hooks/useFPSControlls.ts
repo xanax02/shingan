@@ -3,8 +3,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from 'three';
 
 //TODO : remove os pointer acceleration
-
-export const useFPSControls = (lockTarget: React.RefObject<Element | null>) => {
+export const useFPSControls = () => {
 
     const { camera, gl } = useThree();
 
@@ -13,17 +12,10 @@ export const useFPSControls = (lockTarget: React.RefObject<Element | null>) => {
 
     useEffect(() => {
 
-        //for now if user clicks on escape or remove pointerLockElement
-        // by any means this lockTarget should be null so that 
-        // camera won't move after exitting the pointer lock
-        const handlePointerLockChange = () => {
-            if (document.pointerLockElement === null) {
-                lockTarget.current = null;
-            }
-        }
-
         const handleMouseMove = (e: MouseEvent) => {
-            if (!lockTarget?.current) return;
+            if (!document.pointerLockElement) return;
+
+            if(document.pointerLockElement !== gl.domElement) return;
 
 
             yaw.current -= e.movementX * 0.002;
@@ -33,10 +25,8 @@ export const useFPSControls = (lockTarget: React.RefObject<Element | null>) => {
         }
 
         window.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("pointerlockchange", handlePointerLockChange)
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("pointerlockchange", handlePointerLockChange)
         }
 
     }, [gl.domElement])

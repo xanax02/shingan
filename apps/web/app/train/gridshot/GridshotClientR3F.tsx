@@ -11,26 +11,20 @@ import CountdownOverlay from '../../game-engine/components/CountdownOverlay';
 import GridshotHUD from '../../game-engine/components/GridshotHUD';
 import ResultsOverlay from '../../game-engine/components/ResultsOverlay';
 import { useGameStore } from '../../store/gameStore';
+import ClickToPlayOverlay from '../../game-engine/components/ClickToPlayOverlay';
 
 export default function GridshotClientR3F() {
 
-    const pointerLockRef = useRef<Element | null>(null);
     const phase = useGameStore((s) => s.phase);
-    const startCountdown = useGameStore((s) => s.startCountdown);
     const reset = useGameStore((s) => s.reset);
+    const gameCanvasRef = useRef<HTMLCanvasElement>(null);
 
-    // Start the countdown on mount, cleanup on unmount
     useEffect(() => {
-        startCountdown();
         return () => reset();
     }, []);
 
-    const handleClick = (e: React.MouseEvent) => {
-        pointerLockRef.current = e.currentTarget;
-        //sending pointerLockRef to FPSController as e.currentRef
-        // and doc.pointerLock element are different
-        // so i'll directly check if this ref contain any lock element or not
-        e.currentTarget.requestPointerLock();
+    const handleClick = () => {
+        gameCanvasRef.current?.requestPointerLock();
     }
 
     // Only show crosshair during gameplay
@@ -41,8 +35,9 @@ export default function GridshotClientR3F() {
             {showCrosshair && <Crosshair />}
             <GridshotHUD />
             <CountdownOverlay />
+            <ClickToPlayOverlay onClick={handleClick} />
             <ResultsOverlay />
-            <Canvas onClick={handleClick}>
+            <Canvas ref={gameCanvasRef}>
                 <PerspectiveCamera
                     makeDefault
                     fov={75}
@@ -51,7 +46,7 @@ export default function GridshotClientR3F() {
                 <ambientLight intensity={1} />
                 <directionalLight position={[0, 8, 0]} intensity={1.5} />
                 <Room />
-                <FPSCamera lockTarget={pointerLockRef} />
+                <FPSCamera />
                 <GameScene />
             </Canvas>
         </div>

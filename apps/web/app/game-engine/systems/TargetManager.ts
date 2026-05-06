@@ -2,6 +2,7 @@ import { Scene, Vector3, Camera } from "three";
 import { createTarget } from "../entities/Targets";
 import * as THREE from "three";
 
+//TODO: separate target from each other(sometime target forms one above another)
 export class TargetManager {
   private scene: Scene;
   private camera: Camera;
@@ -46,10 +47,6 @@ export class TargetManager {
     }
     this.targets.clear();
   }
-
-  // ───────────────────────────────────────────
-  // AIM LAB STYLE POSITION GENERATION
-  // ───────────────────────────────────────────
 
   private getNextPosition(): Vector3 {
     const dir = this.randomDirection();
